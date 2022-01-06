@@ -1,7 +1,7 @@
 ---
 title: "Objects, Classes & NAs"
-date: "`r Sys.Date(1/05/2022)`"
-output:html_document
+date: "`r Sys.Date()`"
+output:
   html_document:
     theme: spacelab
     toc: yes
@@ -70,13 +70,14 @@ We get an error here because `else` is a function in R. You also don't want to g
 
 2. Use arithmetic to calculate the mean top speed for the cars.
 ```{r}
-x=c(261,268,270)
+x=(c(venom_GT,chiron,Veyron))
 mean(x)
 ```
 
 3. Use the function `mean()` to calculate the mean top speed for the cars.
 ```{r}
-'??arithemetic'
+x=c(261,268,270)
+mean(x)
 ```
 
 ## Types of Data
