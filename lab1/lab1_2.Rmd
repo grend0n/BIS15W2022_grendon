@@ -1,6 +1,6 @@
 ---
 title: "R, RStudio, and RMarkdown"
-date: "`r Sys.Date()`"
+date: "`r Sys.Date(01/05/2022)`"
 output:
   html_document:
     theme: spacelab
@@ -90,6 +90,9 @@ Email is similar, but you need to include `mailto:` in the parentheses. Here is 
 
 ## Code Chunks
 All R code is inserted between two gray bars called a code chunk. You can insert a new code chunk by clicking "Insert>R" at the top of the page. On a Mac, the shortcut is `option+command+i`.  
+```{r}
+
+```
 
 ## Knit
 In order to make the html file, you need to "Knit" the file. Knitting just means build the file. If you click "Knit" now, it will knit the lab.  
