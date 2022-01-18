@@ -32,8 +32,9 @@ For these exercises we will use the data from lab 4_1.
 fish <- readr::read_csv("data/Gaeta_etal_CLC_data.csv")
 mammals <- readr::read_csv("data/mammal_lifehistories_v2.csv")
 ```
+
 ```{r}
-install.packages("janitor")
+#install.packages("janitor")
 library("janitor")
 ```
 
@@ -43,9 +44,6 @@ names(mammals)
 ```
 
 To keep things tidy, I am going to rename the variables in the mammals data.  
-```{r}
-mammals <- rename(mammals, genus="Genus", wean_mass="wean mass", max_life="max. life", litter_size="litter size", litters_per_year="litters/year")
-```
 
 ## `filter()`
 Unlike `select()`, `filter()` allows us to extract data that meet specific criteria within a variable. Let's say that we are interested only in the fish that occur in lake "AL". We can use `filter()` to extract these observations.  
