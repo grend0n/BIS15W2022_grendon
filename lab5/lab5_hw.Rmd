@@ -143,6 +143,7 @@ superhero_info %>%
 superhero_info %>%
   filter(weight >450 & height >300)
 ```
+#I don't remeber too corectly, but doesn't | mean that it will it exclude some data from our given command?
 
 ## Height to Weight Ratio
 13. It's easy to be strong when you are heavy and tall, but who is heavy and short? Which superheros have the highest height to weight ratio?
