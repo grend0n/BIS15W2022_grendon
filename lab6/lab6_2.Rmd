@@ -2,10 +2,11 @@
 title: "summarize practice, `count()`, `across()`"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
     toc: yes
     toc_float: yes
+    keep_md: yes
   pdf_document:
     toc: yes
 ---
@@ -30,9 +31,15 @@ library("palmerpenguins")
 The summarize() and group_by() functions are powerful tools that we can use to produce clean summaries of data. Especially when used together, we can quickly group variables of interest and save time. Let's do some practice with the [palmerpenguins(https://allisonhorst.github.io/palmerpenguins/articles/intro.html) data to refresh our memory.
 ```{r}
 glimpse(penguins)
+head(penguins)
 ```
 
 As biologists, a good question that we may ask is how do the measured variables differ by island (on average)?
+
+```{r}
+levels(penguins$island)
+```
+
 ```{r}
 penguins %>% 
   group_by(island) %>% 
@@ -56,6 +63,7 @@ penguins %>%
             sd_body_mass_g=sd(body_mass_g),
             n=n())
 ```
+#!is.na, takes away NA's from our data
 
 What if we are interested in the number of observations (penguins) by species and island?
 ```{r}
@@ -76,6 +84,7 @@ Although these summary functions are super helpful, oftentimes we are mostly int
 penguins %>% 
   count(island, sort = T) #sort=T sorts the column in descending order
 ```
+#count acts like both a group_by and summarize together. look at the code below. Different approach, but same result. 
 
 Compare this with `summarize()` and `group_by()`.
 ```{r}
@@ -105,18 +114,32 @@ penguins %>%
 
 ## Practice
 1. Produce a summary of the mean for bill_length_mm, bill_depth_mm, flipper_length_mm, and body_mass_g within Adelie penguins only. Be sure to provide the number of samples.
-```{r}
 
+```{r}
+levels(penguins$species)
+```
+
+```{r}
+penguins%>%
+  filter(species=="Adelie")%>%
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)%>%
+summarise(mean_bill_length_mm=mean(bill_length_mm, na.rm=T),
+            mean_bill_depth_mm=mean(bill_depth_mm, na.rm=T),
+             mean_flipper_length_mm=mean(flipper_length_mm, na.rm=T),
+              mean_body_mass_g=mean(body_mass_g, na.rm=T),
+                n_samples=n())
 ```
 
 2. How does the mean of `bill_length_mm` compare between penguin species?
 ```{r}
-
+penguins%>%
+  group_by(species)%>%
+  summarize(mean_bill_length_mm=mean(bill_length_mm, na.rm=T))
 ```
 
 3. For some penguins, their sex is listed as NA. Where do these penguins occur?
 ```{r}
-
+penguins%>%count(sex, island)
 ```
 
 ## `across()`
@@ -126,7 +149,7 @@ What if we wanted to apply summarize in order to produce distinct counts over mu
 ```{r}
 penguins %>%
   summarize(distinct_species = n_distinct(species),
-            distinct_island = n_distinct(island),
+            distinct_island = n_distinct(island), 
             distinct_sex = n_distinct(sex))
 ```
 
@@ -148,9 +171,10 @@ penguins %>%
 
 `group_by` also works.
 ```{r}
-table1 <- penguins %>%
+table1 <-penguins %>%
   group_by(sex) %>% 
   summarize(across(contains("mm"), mean, na.rm=T))
+table1
 ```
 
 Here we summarize across all variables.
@@ -175,8 +199,22 @@ penguins %>%
 ## Practice
 1. Produce separate summaries of the mean and standard deviation for bill_length_mm, bill_depth_mm, and flipper_length_mm for each penguin species. Be sure to provide the number of samples.  
 mean
-```{r}
 
+```{r}
+levels(penguins$species)
+```
+
+```{r}
+penguins%>%
+  group_by(species)%>%
+  summarize(across(c(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g),
+                   na.rm=T, mean))
+```
+```{r}
+penguins%>%
+  group_by(species)%>%
+  summarize(across(c(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g),
+                   na.rm=T, sd))
 ```
 
 ## Wrap-up  
