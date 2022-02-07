@@ -101,9 +101,6 @@ homerange %>%
 ## Practice
 1. There are more herbivores than carnivores in the homerange data, but how do their masses compare? Make a summary and boxplot that compares their masses. Use `log10.mass`.
 
-```{r}
-names(mammals)
-```
 
 ```{r}
 homerange%>%
@@ -133,11 +130,11 @@ mammals_carnivore
 
 3. Now use a boxplot to visualize the range of body mass by family of mammalian carnivore.
 ```{r}
-homerange%>%
-```
-
-```{r}
-
+homerange %>% 
+  filter(class == "mammalia" & trophic.guild == "carnivore") %>% 
+  ggplot(aes(x=family, y=log10.mass))+
+  geom_boxplot()+
+  coord_flip()
 ```
 
 ## That's it, let's take a break!   
