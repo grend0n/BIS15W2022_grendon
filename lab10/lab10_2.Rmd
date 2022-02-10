@@ -58,6 +58,7 @@ There are many options to create nice plots in ggplot. One useful trick is to st
 ```{r}
 p <- homerange %>% 
   ggplot(aes(x= log10.mass, y= log10.hra))
+p
 ```
 
 Play with point size.
@@ -106,7 +107,7 @@ homerange %>%
        x = "Taxonomic Group",
        fill = "Trophic Guild")
 ```
-
+#position = "dodge" lets 2 rows in a column to be present side by side rather than pn top of each other
 Here is the same plot oriented vertically.
 ```{r}
 homerange %>% 
@@ -132,15 +133,27 @@ For this practice, let's use the [palmerpenguins](https://allisonhorst.github.io
 
 1. Make a bar plot that shows counts of individuals by island. Fill by species, and try both a stacked bar plot and `position="dodge"`.
 ```{r}
-
+penguins%>%
+  count(island)
+```
+```{r}
+penguins%>%
+  ggplot(aes(x = island, fill = species))+
+  geom_bar(position = position_fill())+
+   geom_bar()
 ```
 
 ```{r}
-
+penguins%>%
+  ggplot(aes(x = island, fill = species))+
+  geom_bar(position = position_fill())+
+   geom_bar(position = "dodge")
 ```
 
 2. What are the number of individuals separated by sex on each island?
 ```{r}
+penguins%>%
+  filter(sex!="NA")
 
 ```
 
