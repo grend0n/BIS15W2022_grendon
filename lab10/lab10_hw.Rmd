@@ -1,11 +1,11 @@
 ---
 title: "Lab 10 Homework"
-author: "Please Add Your Name Here"
+author: "Gabriel Rendon"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
-    toc: no
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -57,12 +57,7 @@ deserts%>%
 ```
 
 3. What is the proportion of taxa included in this study? Show a table and plot that reflects this count.
-```{r}
-deserts%>%
-  ggplot(aes(x = taxa)) + geom_bar() +
-  labs(title = "Observations by Taxa",
-       x = "Taxonomic Group")
-```
+
 ```{r}
 deserts%>%
   count(taxa)%>%
@@ -98,27 +93,74 @@ deserts %>%
 
 6. Add another layer to your answer from #4 using `geom_point` to get an idea of how many measurements were taken for each species.
 ```{r}
-
+deserts %>% 
+  filter(weight!="NA") %>% 
+  ggplot(aes(x=species, y=weight)) +
+  geom_boxplot()+
+  geom_point()+
+  coord_flip() +
+  labs(title = "Species Weight",
+       x = "species",
+       y = "Weight")+
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5))
 ```
+#ummmm, is it supposed to look like that? 
 
 7. [Dipodomys merriami](https://en.wikipedia.org/wiki/Merriam's_kangaroo_rat) is the most frequently sampled animal in the study. How have the number of observations of this species changed over the years included in the study?
 ```{r}
+deserts%>%
+  filter(species_id=="DM")%>%
+  group_by(year)%>%
+  summarize(number_observed=n())
+```
 
+```{r}
+ merriami<-deserts%>%
+  filter(species_id=="DM")%>%
+  group_by(year)%>%
+  summarize(number_observed=n())%>%
+ggplot(aes(x=as.factor(year), y=number_observed, fill=year))+ geom_col()+theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+  labs(title = "Dipodomys merriami observed from 1977-2002",
+x = NULL,
+y= "n")
+merriami
 ```
 
 8. What is the relationship between `weight` and `hindfoot` length? Consider whether or not over plotting is an issue.
 ```{r}
-
+deserts%>%
+  ggplot(aes(x=weight,y=hindfoot_length,color=species))+
+  geom_point()
 ```
 
 9. Which two species have, on average, the highest weight? Once you have identified them, make a new column that is a ratio of `weight` to `hindfoot_length`. Make a plot that shows the range of this new ratio and fill by sex.
 ```{r}
-
+deserts%>%
+  filter(!is.na(weight))%>%
+  group_by(species)%>%
+  summarise(mean_weight=mean(weight))%>%
+  arrange(desc(mean_weight))
+```
+```{r}
+ratio_deserts<-deserts%>%
+  filter(species %in% c("spectabilis","albigula"),!is.na(weight),!is.na(hindfoot_length),!sex=="NA")%>%
+  mutate(ratio=weight/hindfoot_length)%>%
+  ggplot(aes(x=species,fill=sex, y=ratio))+geom_boxplot()+theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+  labs(title="Ratio of weight and hindfoot length", x="species", y="ratio")
+ratio_deserts
 ```
 
 10. Make one plot of your choice! Make sure to include at least two of the aesthetics options you have learned.
-```{r}
 
+```{r}
+deserts%>% 
+  filter(hindfoot_length!="NA") %>%
+ ggplot(aes(x = genus, y = hindfoot_length))+
+  geom_point(size=1, color="violetred", alpha=0.6)+
+  labs(title = "Genus and their hindfoot_length",
+       x = "Genus",
+       y = "hindfoot_length")+ 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
 ```
 
 ## Push your final code to GitHub!
