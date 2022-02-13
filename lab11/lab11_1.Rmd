@@ -1,10 +1,11 @@
 ---
 title: "Data Visualization: `ggplot` part 3"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
     toc: yes
     toc_float: yes
+    keep_md: yes
   pdf_document:
     toc: yes
 ---
@@ -111,9 +112,9 @@ grDevices::colors()
 ## Density plots  
 Density plots are similar to histograms but they use a smoothing function to make the distribution more even and clean looking. They do not use bins.
 ```{r}
-  ggplot(aes(x=log10.mass)) +
-  geom_histogram(aes(y = ..density..), fill = "deepskyblue4", alpha = 0.4, color = "black")+
-  geom_density(color = "red")+
+homerange %>% 
+  ggplot(aes(x = log10.mass)) +
+  geom_density(fill="red", alpha  =0.4, color = "black")+
   labs(title = "Distribution of Body Mass")
 ```
 
@@ -204,16 +205,36 @@ quartiles <- quantcut(homerange$log10.hra)
 table(quartiles)
 ```
 
+```{r}
+homerange <- homerange %>% 
+  mutate(range_category= case_when(log10.hra<3.65 ~ "very_small",
+                                   log10.hra>=3.65 & log10.hra <4.59 ~ "small",
+                                   log10.hra>=4.59 & log10.hra <6.02 ~ "medium",
+                                   log10.hra>=6.02 ~ "large"))
+```
+
+
 2. How many and which taxonomic classes are represented in each of the `range_category` classes?
 ```{r}
-homerange%>%
-  mutate(range_category)
-  
+homerange %>% 
+  ggplot(aes(x="range_category", fill=class))+
+  geom_bar(position= "dodge",  color="black", alpha=0.6)+
+  labs(title = "Observations by Range Category in Homerange Data",
+       x = "Range Category",
+       fill = "Class")
 ```
 
 3. Isolate the small `range_category` and plot the range of `log10.mass` by taxonomic class.
-```{r}
 
+```{r}
+homerange
+```
+
+```{r}
+homerange %>% 
+  filter(range_category=="small") %>% 
+  ggplot(aes(x=class, y=log10.mass, fill=class))+
+  geom_boxplot(alpha=0.6)
 ```
 
 ## That's it! Take a break and I will see you on Zoom!  
