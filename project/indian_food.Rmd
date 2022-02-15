@@ -1,0 +1,28 @@
+---
+title: "indian food"
+author: "Gabriel Rendon"
+date: "2/14/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+## Load the libraries
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+```{r}
+getwd()
+```
+
+#Load in the data:
+```{r}
+food<- read_csv(here("project", "indian_food.csv"))
+```
