@@ -2,10 +2,11 @@
 title: "Data Visualization: Venn Diagrams & Word Clouds"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
     toc: yes
     toc_float: yes
+    keep_md: yes
   pdf_document:
     toc: yes
 ---
@@ -23,7 +24,7 @@ library(tidyverse)
 #install.packages("ggVennDiagram")
 library(ggVennDiagram)
 library(RColorBrewer)
-#install.packages("ggworldcloud")
+#install.packages("ggwordcloud")
 library(ggwordcloud)
 ```
 
@@ -79,7 +80,7 @@ Do they fly? Are they a bird?
 We can recycle the `flying_vec`
 Do they fly?
 ```{r}
-# flying_vec
+flying_vec
 ```
 
 Are they a bird?
@@ -107,7 +108,9 @@ homerange%>%
 
 what is the flying non-bird?
 ```{r}
-
+homerange%>%
+  filter(locomotion=="flying")%>%
+  filter(taxon!="birds")
 ```
 
 
@@ -137,7 +140,7 @@ Lets work with the 2 question plot for now:
 venn_plot <- ggVennDiagram(fly_or_bird_list, category.names = c("Fly", "Bird"), edge_size = 1.5)
 
 venn_plot +
-  scale_fill_distiller(palette = "Greys")+ #distiller is for discrete data
+  scale_fill_distiller(palette = "purple")+ #distiller is for discrete data
   labs(title = "Do all birds fly? Do only birds fly?",
          caption = ("you can add a caption here, e.g.: Studys show not all birds fly, and not only birds fly")
   )
@@ -210,6 +213,11 @@ Use dplyr to determine which 20 animals from this plot are:
 
 ```
 
+```{r}
+fly_bird_herbi_list <- list(swimming_vec, carni_vec, aqua_vec, ecto_vec)
+
+ggVennDiagram(fly_bird_herbi_list, category.names = c("Swimming", "Carnivores", "Aquatic", "Ectoderms"))
+```
 
 
 
@@ -248,11 +256,21 @@ If they dont fit, try tinkering the `scale_size_area(max_size =   )`
 
 make the count table:
 ```{r}
-
+reptilia_count <- homerange %>% 
+  filter(class == "reptilia") %>% 
+  count(family)
+reptilia_count
 ```
 
 
 make the plot:
 ```{r}
-
+reptilia_count %>% 
+ggplot(aes(
+  label = family, 
+  size = n,
+  color = family))+
+  geom_text_wordcloud()+
+  scale_size_area(max_size = 15)+
+  theme_minimal()
 ```
